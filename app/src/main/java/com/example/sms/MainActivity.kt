@@ -129,6 +129,7 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             for ((index, contact) in selectedContacts.withIndex()) {
                 sendWhatsAppMessage(contact.phoneNumber, message)
+
                 if (index < selectedContacts.size - 1) {
                     delay(2000)
                 }
@@ -156,7 +157,7 @@ class MainActivity : AppCompatActivity() {
     private fun formatPhoneNumber(phoneNumber: String): String {
         var formatted = phoneNumber.replace("[^+\\d]".toRegex(), "")
         if (!formatted.startsWith("+")) {
-            formatted = "+1$formatted" // Ülke kodunu ihtiyacına göre değiştir
+            formatted = "+90$formatted" // Türkiye için +90
         }
         return formatted
     }
@@ -176,12 +177,13 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
         when (requestCode) {
             CONTACTS_PERMISSION_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission granted!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Permission granted! You can now load contacts.", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this, "Permission denied.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Permission denied. Cannot access contacts.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
